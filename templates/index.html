@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Vehicle Price Prediction</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <style>
+      html, body {
+      min-height: 100%;
+      }
+      body, div, form, input, select, textarea, p { 
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 22px;
+      }
+      h1 {
+      position: absolute;
+      margin: 0;
+      font-size: 32px;
+      color: #fff;
+      z-index: 2;
+      }
+      .testbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      padding: 20px;
+      }
+      form {
+      width: 70%;
+      padding: 20px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 0 20px 0 #095484; 
+      }
+      .banner {
+      position: relative;
+      height: 0px; 
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      }
+      .banner::after {
+      content: "";
+      background-color: rgba(0, 0, 0, 0.5); 
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      }
+      input, select, textarea {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      }
+      input {
+      width: calc(100% - 10px);
+      padding: 5px;
+      }
+      select {
+      width: 100%;
+      padding: 7px 0;
+      background: transparent;
+      }
+      .item:hover p, .item:hover i, .question:hover p, .question label:hover, input:hover::placeholder, a {
+      color: #095484;
+      }
+      .item input:hover, .item select:hover, .item textarea:hover {
+      border: 1px solid transparent;
+      box-shadow: 0 0 6px 0 #095484;
+      color: #095484;
+      }
+      .item {
+      position: relative;
+      margin: 10px 0;
+      }
+      input[type="date"]::-webkit-inner-spin-button {
+      display: none;
+      }
+      .item i, input[type="date"]::-webkit-calendar-picker-indicator {
+      position: absolute;
+      font-size: 20px;
+      color: #a9a9a9;
+      }
+      .item i {
+      right: 2%;
+      top: 30px;
+      z-index: 1;
+      }
+      [type="date"]::-webkit-calendar-picker-indicator {
+      right: 1%;
+      z-index: 2;
+      opacity: 0;
+      cursor: pointer;
+      }
+      input[type=radio], input[type=checkbox]  {
+      display: none;
+      }
+      label.radio, label.check {
+      position: relative;
+      display: inline-block;
+      margin: 5px 20px 15px 0;
+      cursor: pointer;
+      }
+      .question span {
+      margin-left: 30px;
+      }
+      span.required {
+      margin-left: 0;
+      color: red;
+      }
+      .checkbox-item label {
+      margin: 5px 20px 10px 0;
+      }
+      label.radio:before, label.check:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      }
+      label.radio:before {
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      border: 2px solid #095484;
+      }
+      label.check:before {
+      top: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      border: 1px solid #095484;
+      }
+      input[type=checkbox]:checked + .check:before {
+      background: #095484;
+      }
+      label.radio:after {
+      left: 5px;
+      border: 3px solid #095484;
+      }
+      label.check:after {
+      left: 4px;
+      border: 3px solid #fff;
+      }
+      label.radio:after, label.check:after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      width: 8px;
+      height: 4px;
+      background: transparent;
+      border-top: none;
+      border-right: none;
+      transform: rotate(-45deg);
+      opacity: 0;
+      }
+      input[type=radio]:checked + label:after, input[type=checkbox]:checked + label:after {
+      opacity: 1;
+      }
+      .btn-block {
+      margin-top: 10px;
+      text-align: center;
+      }
+      
+      button {
+      width: 150px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px; 
+      background: #095484;
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
+      }
+      button:hover {
+      background: #0666a3;
+      }
+      .title-block select, .title-block input {
+      margin-bottom: 10px;
+      }
+      @media (min-width: 568px) {
+      .title-block {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      }
+      .title-block select {
+      width: 200px;
+      margin-bottom: 0;
+      }
+      .title-block input {
+      width: 189px;
+      margin-bottom: 0;
+      }
+      .city-item {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      }
+      .city-item input {
+      width: calc(50% - 20px);
+      }
+      .city-item select {
+      width: calc(50% - 8px);
+      }
+      }
+    </style>
+    <script>
+    var subjectObject = {
+      "HMSI": ['HONDA ACTIVA 5G', 'HONDA SHINE', 'HONDA CD110', 'HONDA DIO', 'HONDA ACTIVA', 'HONDA ACTIVA 125', 'DREAM CD 110 DRUM', 'LIVO (CBF110G)', 'HONDA ACTIVA 4G', 'HONDA SHINE SP', 'DREAM YUGA', 'HONDA SHINE DRUM', 'HONDA SHINE DISC', 'HONDA DREAM', 'HONDA GRAZIA', 'HONDA UNICORN', 'HONDA AVIATOR', 'HONDA  X BLADE', 'HONDA HORNET 160', 'DREAM YUGA KICK DRUM SPOKE', 'HONDA CLIQ', 'HONDA ACTIVA 3G', 'HONDA ACTIVA I', 'GRAZIA 125 SJ', 'HONDA DREAM NEO', 'GLAMOUR', 'HONDA AVIATOR DRUM', 'ACTIVA 6', 'DREAM NEO SPOKE', 'HONDA X BLADE FS JID', 'HONDA TWISTER'],
+      "HERO MOTOR CORP": ['SPLENDOR PLUS', 'HERO HF DELUXE', 'PASSION PRO', 'GLAMOUR', 'SPLENDOR', 'SUPER SPLANDER', 'PLEASURE', 'MAESTRO', 'MAESTRO EDGE', 'SPLENDOR PRO', 'CD DELUXE', 'HERO DESTINI 125 VX', 'HERO DUET', 'HERO DESTINI 125 LX', 'SPLENDOR I SMART', 'DREAM YUGA KICK DRUM ALLOY', 'XPULSE 200T', 'HERO PASSION X PRO', 'CBZ XTREME (SS)', 'X-TREAM-DISC SELF', 'PASSION PLUS', 'CD DAWN', 'IGNITOR', 'HUNK', 'PASSION'],
+      "TVS MOTORS": ['JUPITER', 'TVS STAR SPORTS', 'TVS RADEON', 'TVS APACHE RTR 160 4V FI ABS', 'TVS XL SUPER', 'NTORQ', 'TVS XL SUPER HD', 'TVS JUPITER', 'TVS STAR CITY', 'APACHE 160 RTR', 'JUPITER CLASSIC', 'JUPITER DISC', 'TVS SCOOTY PEP PLUS', 'TVS VICTOR', 'TVS NTORQ 125', 'JUPITER BASE', 'TVS XL 100 HEAVY DUTY', 'TVS JUPITER GRANDE DRUM', 'APACHE 180', 'NTORQ 125', 'APACHE 180 RTR', 'TVS JUPITER ZX', 'TVS SCOOTY ZEST 110', 'WEGO', 'APACHE RTR 200'],
+      "SUZUKI": ['ACCESS 125', 'GIXXER 155 CC', 'BURGMAN STREET', 'BURGMAN 125', 'ACCESS SPL DISC', 'HAYATE', 'BURGMAN STREET 125', 'SUZUKI', 'GIXXER 250 CC'],
+      "YAMAHA": ['RAY', 'YAHAMA SCOOTER - FASINO', 'FASCINO', 'FZ S', 'YAMAHA FZ', 'R15 FZS SPL LTD', 'FZ -R', 'YAMAHA FZ S V 2.0', 'SALUTO 125', 'FUSION', 'YFZ-R15', 'ALPHA'],
+      "BAJAJ AUTO LTD": ['PLATINA', 'PULSAR 150CC DTSI', 'BAJAJ PLATINA 100CC WITHOUT SELF', 'CT 100 ALLY WHEEL'],
+      "MAHINDRA TWOWHEELER": ['GUSTO 110CC'],
+      "PIAGGIO PVT LTD": ['VESPA', 'VESPA NOTTE 125'],
+      "ROYAL ENFIELD": ['CLASSIC 350', 'ROYAL ENFIELD CLASSIC 500'],
+    }
+    window.onload = function() {
+      var brandSel = document.getElementById("brand");
+      var modelSel = document.getElementById("model");
+      for (var x in subjectObject) {
+        brandSel.options[brandSel.options.length] = new Option(x, x);
+      }
+      brandSel.onchange = function() {
+        //empty Chapters dropdown
+        modelSel.length = 1;
+        //display correct values
+        var z = subjectObject[brandSel.value];
+        for (var i = 0; i < z.length; i++) {
+      modelSel.options[modelSel.options.length] = new Option(z[i], z[i]);
+      }
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div class="testbox">
+    <form method="post"  action="{{ url_for('predict')}}" enctype="multipart/form-data">
+      <br>
+      <fieldset>
+      <legend><b>Vehicle Information</b></legend>
+      <div class="item">
+          <div class="title-block">
+          <div>
+          <p><b>State</b></p>
+          <select name="state" required>
+            <option value="">Select State</option>
+            <option value="RAJASTHAN">RAJASTHAN</option>
+            <option value="TELANGANA">TELANGANA</option>
+            <option value="GUJARAT">GUJARAT</option>
+            <option value="TAMIL NADU">TAMIL NADU</option>
+            <option value="ANDHRA PRADESH">ANDHRA PRADESH</option>
+            <option value="PUNJAB">PUNJAB</option>
+            <option value="CENTRAL">CENTRAL</option>
+            <option value="ORISSA">ORISSA</option>
+            <option value="KARNATAKA">KARNATAKA</option>
+            <option value="DELHI AND HARYANA">DELHI AND HARYANA</option>
+            <option value="UTTAR PRADESH">UTTAR PRADESH</option>
+            <option value="EAST">EAST</option>
+            <option value="KERALA">KERALA</option>
+            <option value="MAHARASHTRA">MAHARASHTRA</option>
+            <option value="MADHYA PRADESH">MADHYA PRADESH</option>
+          </select>
+          </div>
+          <div>
+          <p><b>Vehicle Brand</b></p>
+          <select name="brand" id="brand" required/>
+            <option value="" selected="selected">Select Brand</option>
+          </select>
+          </div>
+          <div>
+          <p><b>Vehicle Model</b></p>
+          <select name="model" id="model" required/>
+            <option value="" selected="selected">Select Model</option>
+          </select>
+          </div>
+          <div>
+          <p><b>Manufactured Year</b></p>
+          <input type="text" name="year" required/>
+          </div>
+          </div>
+      </div>
+      </fieldset>
+      <br>
+        <div class="btn-block">
+          <button type="submit">Predict Price</button>
+        </div>
+    </form>
+    </div>
+  </body>
+</html>
